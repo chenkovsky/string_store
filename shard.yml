@@ -6,4 +6,8 @@ authors:
 
 crystal: 0.25.1
 
+dependencies:
+  super_io:
+    github: chenkovsky/super_io
+
 license: MIT
