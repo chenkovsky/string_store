@@ -5,8 +5,7 @@ require "./string_store/*"
 require "super_io"
 
 class StringStore < StringPool
-  include SuperIO::Save
-  extend SuperIO::Load
+  SuperIO.save_load
 
   def to_io(io : IO, format : IO::ByteFormat)
     SuperIO.to_io self.to_a, io, format
