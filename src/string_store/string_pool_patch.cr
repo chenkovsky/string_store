@@ -9,6 +9,31 @@ class StringPool
     return ret
   end
 
+  def [](str : String) : UInt64
+    ret = self[str]?
+    raise "Cannot find #{str.inspect}" if ret.nil?
+    return ret
+  end
+
+  def []?(str : String) : UInt64?
+    str_p = str.to_unsafe
+    len = str.bytesize
+    hash = hash(str_p, len)
+    mask = (@capacity - 1).to_u64
+    index = hash & mask
+    next_probe_offset = 1_u64
+    while (h = @hashes[index]) != 0
+      if h == hash && @values[index].bytesize == len
+        if str_p.memcmp(@values[index].to_unsafe, len) == 0
+          return h
+        end
+      end
+      index = (index + next_probe_offset) & mask
+      next_probe_offset += 1_u64
+    end
+    return nil
+  end
+
   def []?(hash : UInt64) : String?
     mask = (@capacity - 1).to_u64
     index = hash & mask
