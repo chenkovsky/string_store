@@ -71,4 +71,8 @@ class StringPool
   def hash(str : String) : UInt64
     hash(str.to_unsafe, str.bytesize)
   end
+
+  def hash(bytes : Bytes) : UInt64
+    hash(bytes.to_unsafe, bytes.size)
+  end
 end
